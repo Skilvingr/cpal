@@ -486,6 +486,17 @@ macro_rules! impl_platform_host {
                     )*
                 }
             }
+            
+            fn get_sample_rate(&self) -> SampleRate {
+                match self.0 {
+                    $(
+                        $(#[cfg($feat)])?
+                        StreamInner::$HostVariant(ref s) => {
+                            s.get_sample_rate()
+                        }
+                    )*
+                }
+            }
         }
 
         impl From<DeviceInner> for Device {
@@ -589,6 +600,7 @@ mod platform_impl {
         SupportedInputConfigs as JackSupportedInputConfigs,
         SupportedOutputConfigs as JackSupportedOutputConfigs,
     };
+    use crate::SampleRate;
 
     impl_platform_host!(#[cfg(feature = "jack")] Jack jack "JACK", Alsa alsa "ALSA");
 
@@ -680,6 +692,7 @@ mod platform_impl {
 
 #[cfg(target_os = "android")]
 mod platform_impl {
+    use crate::SampleRate;
     pub use crate::host::oboe::{
         Device as OboeDevice, Devices as OboeDevices, Host as OboeHost, Stream as OboeStream,
         SupportedInputConfigs as OboeSupportedInputConfigs,

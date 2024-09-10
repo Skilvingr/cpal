@@ -2,7 +2,7 @@ use super::windows_err_to_cpal_err;
 use crate::traits::StreamTrait;
 use crate::{
     BackendSpecificError, Data, InputCallbackInfo, OutputCallbackInfo, PauseStreamError,
-    PlayStreamError, SampleFormat, StreamError,
+    PlayStreamError, SampleFormat, SampleRate, StreamError,
 };
 use std::mem;
 use std::ptr;
@@ -178,6 +178,9 @@ impl StreamTrait for Stream {
         self.push_command(Command::PauseStream)
             .map_err(|_| crate::error::PauseStreamError::DeviceNotAvailable)?;
         Ok(())
+    }
+    fn get_sample_rate(&self) -> SampleRate {
+        unimplemented!()
     }
 }
 

@@ -679,6 +679,7 @@ mod platform_impl {
         Stream as WasapiStream, SupportedInputConfigs as WasapiSupportedInputConfigs,
         SupportedOutputConfigs as WasapiSupportedOutputConfigs,
     };
+    use crate::SampleRate;
 
     impl_platform_host!(#[cfg(feature = "asio")] Asio asio "ASIO", Wasapi wasapi "WASAPI");
 

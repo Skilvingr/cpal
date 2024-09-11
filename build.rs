@@ -1,6 +1,6 @@
-use std::env;
+//use std::env;
 
-const CPAL_ASIO_DIR: &str = "CPAL_ASIO_DIR";
+//const CPAL_ASIO_DIR: &str = "CPAL_ASIO_DIR";
 
 fn main() {
     // println!("cargo:rerun-if-env-changed={}", CPAL_ASIO_DIR);

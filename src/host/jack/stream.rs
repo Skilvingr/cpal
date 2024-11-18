@@ -441,7 +441,7 @@ impl JackNotificationHandler {
 }
 
 impl jack::NotificationHandler for JackNotificationHandler {
-    fn shutdown(&mut self, _status: jack::ClientStatus, reason: &str) {
+    unsafe fn shutdown(&mut self, _status: jack::ClientStatus, reason: &str) {
         self.send_error(format!("JACK was shut down for reason: {}", reason));
     }
 

@@ -2,12 +2,7 @@
 
 use std::time::Duration;
 
-use crate::{
-    BuildStreamError, Data, DefaultStreamConfigError, DeviceNameError, DevicesError,
-    InputCallbackInfo, InputDevices, OutputCallbackInfo, OutputDevices, PauseStreamError,
-    PlayStreamError, SampleFormat, SizedSample, StreamConfig, StreamError, SupportedStreamConfig,
-    SupportedStreamConfigRange, SupportedStreamConfigsError,
-};
+use crate::{BuildStreamError, Data, DefaultStreamConfigError, DeviceNameError, DevicesError, InputCallbackInfo, InputDevices, OutputCallbackInfo, OutputDevices, PauseStreamError, PlayStreamError, SampleFormat, SampleRate, SizedSample, StreamConfig, StreamError, SupportedStreamConfig, SupportedStreamConfigRange, SupportedStreamConfigsError};
 
 /// A [`Host`] provides access to the available audio devices on the system.
 ///
@@ -220,4 +215,6 @@ pub trait StreamTrait {
     /// Note: Not all devices support suspending the stream at the hardware level. This method may
     /// fail in these cases.
     fn pause(&self) -> Result<(), PauseStreamError>;
+    
+    fn get_sample_rate(&self) -> SampleRate;
 }

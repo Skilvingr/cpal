@@ -1009,6 +1009,10 @@ impl StreamTrait for Stream {
         self.inner.channel.pause(true).ok();
         Ok(())
     }
+
+    fn get_sample_rate(&self) -> SampleRate {
+        self.inner.conf.sample_rate
+    }
 }
 
 fn set_hw_params_from_format(

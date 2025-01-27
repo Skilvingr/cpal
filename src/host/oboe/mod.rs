@@ -1,12 +1,11 @@
+extern crate oboe;
+
 use std::cell::RefCell;
 use std::cmp;
 use std::convert::TryInto;
 use std::time::Duration;
 use std::vec::IntoIter as VecIntoIter;
 
-extern crate oboe;
-
-use crate::traits::{DeviceTrait, HostTrait, StreamTrait};
 use crate::{
     BackendSpecificError, BufferSize, BuildStreamError, Data, DefaultStreamConfigError,
     DeviceNameError, DevicesError, InputCallbackInfo, OutputCallbackInfo, PauseStreamError,
@@ -14,16 +13,18 @@ use crate::{
     SupportedBufferSize, SupportedStreamConfig, SupportedStreamConfigRange,
     SupportedStreamConfigsError,
 };
-
-mod android_media;
-mod convert;
-mod input_callback;
-mod output_callback;
+use crate::traits::{DeviceTrait, HostTrait, StreamTrait};
 
 use self::android_media::{get_audio_record_min_buffer_size, get_audio_track_min_buffer_size};
 use self::input_callback::CpalInputCallback;
 use self::oboe::{AudioInputStream, AudioOutputStream};
 use self::output_callback::CpalOutputCallback;
+
+
+mod android_media;
+mod convert;
+mod input_callback;
+mod output_callback;
 
 // Android Java API supports up to 8 channels, but oboe API
 // only exposes mono and stereo.
@@ -212,7 +213,7 @@ fn configure_for_device<D, C, I>(
     } else {
         builder
     };
-    builder = builder.set_sample_rate(config.sample_rate.0.try_into().unwrap());
+    //builder = builder.set_sample_rate(config.sample_rate.0.try_into().unwrap());
     match &config.buffer_size {
         BufferSize::Default => builder,
         BufferSize::Fixed(size) => builder.set_buffer_capacity_in_frames(*size as i32),
@@ -235,6 +236,9 @@ where
 {
     let builder = configure_for_device(builder, device, config);
     let stream = builder
+        .set_sample_rate_conversion_quality(oboe::SampleRateConversionQuality::None)
+        .set_performance_mode(oboe::PerformanceMode::LowLatency)
+        .set_input_preset(oboe::InputPreset::Unprocessed)
         .set_callback(CpalInputCallback::<T, C>::new(
             data_callback,
             error_callback,
@@ -494,6 +498,13 @@ impl StreamTrait for Stream {
                 .borrow_mut()
                 .request_pause()
                 .map_err(PauseStreamError::from),
+        }
+    }
+
+    fn get_sample_rate(&self) -> SampleRate {
+        match self {
+            Self::Input(s) => SampleRate(s.borrow().get_sample_rate() as u32),
+            Self::Output(s) => SampleRate(s.borrow().get_sample_rate() as u32)
         }
     }
 }

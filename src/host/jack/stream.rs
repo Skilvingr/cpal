@@ -216,6 +216,10 @@ impl StreamTrait for Stream {
         self.playing.store(false, Ordering::SeqCst);
         Ok(())
     }
+
+    fn get_sample_rate(&self) -> SampleRate {
+        SampleRate(self.async_client.as_client().sample_rate() as u32)
+    }
 }
 
 type InputDataCallback = Box<dyn FnMut(&Data, &InputCallbackInfo) + Send + 'static>;

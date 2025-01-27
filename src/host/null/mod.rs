@@ -1,12 +1,7 @@
 use std::time::Duration;
 
 use crate::traits::{DeviceTrait, HostTrait, StreamTrait};
-use crate::{
-    BuildStreamError, Data, DefaultStreamConfigError, DeviceNameError, DevicesError,
-    InputCallbackInfo, OutputCallbackInfo, PauseStreamError, PlayStreamError, SampleFormat,
-    StreamConfig, StreamError, SupportedStreamConfig, SupportedStreamConfigRange,
-    SupportedStreamConfigsError,
-};
+use crate::{BuildStreamError, Data, DefaultStreamConfigError, DeviceNameError, DevicesError, InputCallbackInfo, OutputCallbackInfo, PauseStreamError, PlayStreamError, SampleFormat, SampleRate, StreamConfig, StreamError, SupportedStreamConfig, SupportedStreamConfigRange, SupportedStreamConfigsError};
 
 #[derive(Default)]
 pub struct Devices;
@@ -128,6 +123,10 @@ impl StreamTrait for Stream {
     }
 
     fn pause(&self) -> Result<(), PauseStreamError> {
+        unimplemented!()
+    }
+
+    fn get_sample_rate(&self) -> SampleRate {
         unimplemented!()
     }
 }
